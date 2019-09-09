@@ -3,6 +3,7 @@ import random
 import time
 from pprint import pprint
 
+from faker import Faker
 from assertpy import assert_that
 
 from data.data import base, user
@@ -13,36 +14,38 @@ def test_login(app):
     if app.user.account_icon().text == "Вход":
         app.user.account_icon().click()
     app.user.log_in(user['user'], user['passw'])
-    app.user.submit().click()
+    app.user.button_submit().click()
     assert_that(app.user.account_icon().text).is_equal_to("Ihor_QA")
 
 
+
+
 def test_change_account_settings(app):
+    name= Faker().first_name()
+    last = Faker().last_name()
     app.user.account_icon().click()
     app.user.go_to_personaldata()
-    app.user.change_First_last()
-    app.user.submit().click()
+    app.user.change_First_last(name,last)
+    time.sleep(2)
+    app.user.button_submit().click()
 
 
 def test_catch_lenova_phones(app):
+    app.driver.get(base)
     app.user.search('Lenovo')
     app.user.go_to_Smarts_catalog()
-
     app.driver.get(app.driver.current_url + "?checkout=1")
-
     devices = app.phone.get_all_items()
 
     random_phone = random.choice(devices)
     product_info = app.phone.product_info(random_phone)
-    product_info['name'].click()
+    app.driver.get(product_info['link'])
     time.sleep(3)
     assert_that(app.driver.current_url).is_equal_to(product_info['link'])
     resume_info = app.phone.get_Resume_info()
-
     app.user.mini_cart().click()
     print("Cart item : ", app.user.mini_cart_Popup_Item_price())
     phone_in_checkout = app.user.checkout()
-
     assert_that(resume_info['cost']).is_equal_to(phone_in_checkout['cost'])
     if resume_info['cost'] == phone_in_checkout['cost']:
         print("Equal")

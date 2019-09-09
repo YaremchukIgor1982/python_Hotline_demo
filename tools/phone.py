@@ -6,7 +6,7 @@ class Phone:
         self.app = app
 
     def get_all_items(self):
-        return self.app.driver.find_element_by_css_selector(".tile-viewbox .product-item")
+        return self.app.driver.find_elements_by_css_selector(".tile-viewbox .product-item")
 
     def product_info(self,device):
         model = device.find_element_by_css_selector(".item-info p a")

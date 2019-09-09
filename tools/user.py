@@ -1,3 +1,5 @@
+import time
+
 from selenium.webdriver.common.keys import Keys
 
 from data.data import base
@@ -15,10 +17,11 @@ class User:
         self.app.driver.find_element_by_css_selector("[name='login']").send_keys(email)
         self.app.driver.find_element_by_css_selector("[name='password']").send_keys(pwd)
 
-    def submit(self):
-        return self.app.driver.find_element_by_css_selector(".btn-graphite")
+    def button_submit(self):
+        return self.app.driver.find_element_by_css_selector("input.btn-graphite")
 
     def change_First_last(self, name, last):
+
         self.app.driver.find_element_by_css_selector("[name='user_personal_data_form[firstName]']").clear()
         self.app.driver.find_element_by_css_selector("[name='user_personal_data_form[firstName]']").send_keys(name)
 
@@ -34,7 +37,8 @@ class User:
         search.send_keys(Keys.ENTER)
 
     def go_to_Smarts_catalog(self):
-        posts = self.app.driver.find_element_by_css_selector(".active li a")
+        time.sleep(3)
+        posts = self.app.driver.find_elements_by_css_selector(".active li a")
         posts[1].click()
 
     def sort_to_Buy(self):
